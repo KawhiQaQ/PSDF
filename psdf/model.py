@@ -4,21 +4,11 @@ from __future__ import annotations
 import torch
 from torch import nn
 
-from typing import Any
-
 from .config import PSDFConfig
 from .fmie import FMIE
 from .backbone import ViTBackbone
 from .ttc import TTC
 from .pdc import PDC
-
-# Preserve imports supported by the original single-file layout.
-from .attention import MultiheadSelfAttention
-from .backbone import TransformerBlock
-from .classifiers import MLPClassifier
-from .embeddings import sinusoidal_position_encoding
-from .fefc import FEFC
-
 
 class PSDFModel(nn.Module):
     """ViT-Base with harmonic FMIE and three-layer TTC/PDC heads.
@@ -50,7 +40,7 @@ class PSDFModel(nn.Module):
             raise ImportError("Install timm to load ImageNet ViT-B weights") from exc
 
         vit = timm.create_model("vit_base_patch16_224.augreg2_in21k_ft_in1k", pretrained=True)
-        state: dict[str, Any] = vit.state_dict()
+        state = vit.state_dict()
         with torch.no_grad():
             cls_token = state.get("cls_token")
             if cls_token is not None and cls_token.shape[-1] == self.cfg.embed_dim:
@@ -82,7 +72,7 @@ class PSDFModel(nn.Module):
             self.backbone.norm.bias.copy_(state["norm.bias"])
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """MI logits; PDC is excluded from inference."""
+        """Return motor imagery classification logits."""
         return self.forward_task(x)[0]
 
     def encode_tokens(self, x: torch.Tensor) -> torch.Tensor:
@@ -108,5 +98,5 @@ class PSDFModel(nn.Module):
         return self.forward_task_tokens(self.encode_tokens(x))
 
     def forward_dis(self, x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
-        """PDC logits and features for the supplied EEG, without augmentation."""
+        """Return PDC logits and features for the supplied EEG."""
         return self.forward_dis_tokens(self.encode_tokens(x))

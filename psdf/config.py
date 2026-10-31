@@ -1,4 +1,4 @@
-"""Architecture settings for the minimal revision of PSDF."""
+"""PSDF model configuration."""
 from dataclasses import asdict, dataclass
 
 
@@ -15,13 +15,11 @@ class PSDFConfig:
     mlp_ratio: float = 4.0
     dropout: float = 0.1
     layer_norm_eps: float = 1e-6
-    # Set True to load pretrained ViT-B weights; requires the optional timm extra.
-    # Disabled by default to avoid implicit downloads on model construction.
+    # Load pretrained ViT-B weights through timm.
     pretrained_vit: bool = False
     classifier_hidden: int | None = None
     classifier_dropout: float | None = None
     num_aug_ops: int = 6  # PDC output classes: identity plus five operators.
-    # Numerical conditioning used by both the 30- and 60-epoch minimal runs.
     spectral_transform: str = "ortho_power"
     normalize_content: bool = True
     channel_embedding_std: float = 1.0
