@@ -1,4 +1,3 @@
-"""PSDF model configuration."""
 from dataclasses import asdict, dataclass
 
 
@@ -15,7 +14,6 @@ class PSDFConfig:
     mlp_ratio: float = 4.0
     dropout: float = 0.1
     layer_norm_eps: float = 1e-6
-    # Load pretrained ViT-B weights through timm.
     pretrained_vit: bool = False
     classifier_hidden: int | None = None
     classifier_dropout: float | None = None

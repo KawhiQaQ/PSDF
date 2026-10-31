@@ -1,4 +1,3 @@
-"""Shared three-layer classifier architecture for TTC and PDC."""
 from __future__ import annotations
 
 import torch

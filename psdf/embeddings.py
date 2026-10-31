@@ -1,4 +1,3 @@
-"""Sinusoidal temporal position encoding."""
 import math
 
 import torch

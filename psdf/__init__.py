@@ -1,4 +1,3 @@
-"""PSDF model architecture."""
 from .attention import MultiheadSelfAttention
 from .backbone import TransformerBlock, ViTBackbone
 from .classifiers import MLPClassifier

@@ -1,4 +1,3 @@
-"""Multi-head self-attention with separate Q, K and V projections."""
 from __future__ import annotations
 
 import torch

@@ -1,4 +1,3 @@
-"""PSDF assembly, branch forwards and optional pretrained initialization."""
 from __future__ import annotations
 
 import torch
@@ -10,13 +9,8 @@ from .backbone import ViTBackbone
 from .ttc import TTC
 from .pdc import PDC
 
+
 class PSDFModel(nn.Module):
-    """ViT-Base with harmonic FMIE and three-layer TTC/PDC heads.
-
-    Inputs are preprocessed EEG tensors [batch, channels, time]. The default
-    forward returns task logits; token-level methods expose both branches.
-    """
-
     def __init__(self, cfg: PSDFConfig) -> None:
         super().__init__()
         self.cfg = cfg
@@ -72,7 +66,7 @@ class PSDFModel(nn.Module):
             self.backbone.norm.bias.copy_(state["norm.bias"])
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """Return motor imagery classification logits."""
+        """Map EEG [batch, channels, time] to logits [batch, n_classes]."""
         return self.forward_task(x)[0]
 
     def encode_tokens(self, x: torch.Tensor) -> torch.Tensor:
@@ -98,5 +92,5 @@ class PSDFModel(nn.Module):
         return self.forward_task_tokens(self.encode_tokens(x))
 
     def forward_dis(self, x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
-        """Return PDC logits and features for the supplied EEG."""
+        """Return logits [batch, num_aug_ops] and features [batch, embed_dim]."""
         return self.forward_dis_tokens(self.encode_tokens(x))

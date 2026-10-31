@@ -1,4 +1,3 @@
-"""EEG spectral token extraction and channel/time identity encoding."""
 from __future__ import annotations
 
 import torch
@@ -20,7 +19,7 @@ class FMIE(nn.Module):
         if self.stride <= 0:
             raise ValueError("overlap_seconds must be smaller than segment_seconds")
         freqs = torch.fft.rfftfreq(self.segment_len, d=1.0 / cfg.fs)
-        # Eq. (3): strictly positive FFT bins, including Nyquist for even N.
+        # Positive FFT bins, including Nyquist for even segment lengths.
         freq_mask = freqs > 0
         self.register_buffer("freq_index", torch.where(freq_mask)[0], persistent=False)
         self.freq_bins = int(freq_mask.sum().item())

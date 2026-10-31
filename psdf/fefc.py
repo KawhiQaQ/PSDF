@@ -1,4 +1,3 @@
-"""Harmonic frequency-energy feature mapping."""
 from __future__ import annotations
 
 import torch

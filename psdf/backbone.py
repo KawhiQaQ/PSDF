@@ -1,4 +1,3 @@
-"""Transformer blocks and the shared ViT backbone."""
 from __future__ import annotations
 
 import torch
